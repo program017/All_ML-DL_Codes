@@ -20,4 +20,8 @@ for line in loadfile:
             words=lemmatizer.lemmatize(words,pos='a')   
             if words not in stop_words:         
                 lib[words]+=1
+loadfile.close()
+datafile=open('datafile','w')
+for i in lib.most_common(10000):
+    print >>datafile,i[0]
 print 'time taken:{}'.format(time.time()-t1)        
