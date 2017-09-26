@@ -32,16 +32,37 @@ Y=np.array(y)
 #Import Library
 from sklearn.ensemble import RandomForestClassifier #use Rando
 
-model= RandomForestClassifier(n_estimators=1000)
+model= RandomForestClassifier(n_estimators=10)
 
-print 'traning'
+#print 'traning'
 model.fit(X_train_tf,Y)
 
-print 'done traning'
-docs_new = ['buy this', 'OpenGL on the GPU is fast']
-X_new_counts = count_vect.transform(docs_new)
+####         training is done       #####
+df_list = []
+with open('enrontest') as f:
+    for line in f:
+        line = line.strip()
+        columns = re.split(':', line, maxsplit=4)
+        df_list.append(columns)
+docs_new = pd.DataFrame(df_list)
+y_test=[]
+for i in range(len(docs_new)):
+    temp=df[0][i]
+    y_test.append(temp[-1])
+Y_test=np.array(y_test)
+
+X_test_counts = count_vect.transform(docs_new[1])
 tf_transformer = TfidfTransformer(use_idf=False)
-X_new_tfidf = tf_transformer.transform(X_new_counts)
+X_new_tfidf = tf_transformer.transform(X_test_counts)
 
 predicted= model.predict(X_new_tfidf)
-print predicted
+#print predicted
+from sklearn import metrics
+# testing score
+crosstab=pd.crosstab(predicted,Y_test, rownames=['Actual'], colnames=['Predicted'])
+print crosstab
+correct=crosstab['1']['1']+crosstab['0']['0']
+total=crosstab['1']['1']+crosstab['0']['0']+crosstab['0']['1']+crosstab['1']['0']
+accuracy=float(correct)/float(total)
+print "accuracy:{}".format(accuracy*100)
+
