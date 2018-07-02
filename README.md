@@ -1,2 +1,1 @@
-# ml_projects
-ml projects code
+# All ML and DL codes
