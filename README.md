@@ -1,1 +1,1 @@
-# All ML and DL codes
+# All Machine Learning and Deep Learning codes
